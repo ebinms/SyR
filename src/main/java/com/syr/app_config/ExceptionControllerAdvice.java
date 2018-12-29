@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.syr.models.ErrorLog;
+import com.syr.services.impl.ErrorServicesImpl;
+
 /**
  * @author Ebin
  * @on 28-Sep-2018
@@ -28,6 +31,9 @@ public class ExceptionControllerAdvice implements ErrorController {
 	
 	@Autowired
 	HttpSession session;
+	
+	@Autowired
+	ErrorServicesImpl errServices;
 	
 	@ExceptionHandler(Throwable.class)
 	public ApiResponse exceptionHandler(HttpServletRequest request,Throwable e) {
@@ -45,6 +51,13 @@ public class ExceptionControllerAdvice implements ErrorController {
 			}
 		}else{
 			error = new ApiResponse(-1, null, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), request.getHeader("app_lang"));
+		}
+		
+		try{
+			ErrorLog eLog	= new ErrorLog("#", "#", request.getRequestURL().toString(), String.valueOf(error.getResponseCode()), e.getMessage(), error.getMessage(), "#",error.getLanguage());
+			errServices.saveErrorLog(eLog);
+		}catch (Exception ex) {
+			System.out.println("Error while saving error log---"+e.getMessage());
 		}
 		
 		return error;
