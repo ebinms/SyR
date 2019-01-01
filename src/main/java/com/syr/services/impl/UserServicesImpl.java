@@ -102,7 +102,7 @@ public class UserServicesImpl implements UserServices {
 	 */
 	@Transactional
 	@Override
-	public Object addUser(User user) throws Exception {
+	public Object addUser(@Valid User user) throws Exception {
 		try{
 			if(user.getPassword()==null||user.getPassword().trim().equals("#")||user.getPassword().trim().equals("")){
 				throw new Exception("password.notnull");
@@ -171,7 +171,7 @@ public class UserServicesImpl implements UserServices {
 	public Object addUserVehicle(@Valid UserVehicle uVehicle) throws Exception {
 		try{
 			if(uvRepo.existsByUserUserIdAndRegistrationNo(uVehicle.getUser().getUserId(),uVehicle.getRegistrationNo())){
-				throw new Exception("user-registrationNo.duplicate");
+				throw new Exception("user.registration.no.duplicate");
 			}
 			
 			return uvRepo.save(uVehicle);

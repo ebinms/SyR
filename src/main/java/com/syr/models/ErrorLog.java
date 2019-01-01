@@ -7,13 +7,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.syr.defaults.SyrDefault;
 
 @Entity
-@Table(name = "syr_error_log")
+@Table(
+		name = "SYR_ERROR_LOG",
+		indexes = {
+			@Index(columnList="error_date",name="syr_idx_err_date"),
+			@Index(columnList="error_property",name="syr_idx_err_prop")
+		}
+	)
 public class ErrorLog {
 
 	@Id

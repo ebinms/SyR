@@ -2,7 +2,7 @@
 package com.syr.app_config;
 
 /**
- * @author apple
+ * @author Ebin
  *
  */
 public abstract class AbstractPersistentObject implements PersistentObject {

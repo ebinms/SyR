@@ -223,11 +223,16 @@ public class RideServicesImpl implements RideServices {
 				ride.setInviteCount(ride.getInviteCount() + userList.size());
 				rideRepo.save(ride);
 
-				invitations = invitations.stream().peek(invite -> invite.setGuestUser(userList.stream()
-						.filter(user -> (user.getPrimaryEmail().equals(invite.getGuestUsername().trim()) || String
-								.valueOf(user.getPrimaryMobileNo()).equals(invite.getGuestUsername().trim())))
-						.findAny().orElse(null))).peek(invite -> invite.setRide(ride))
-						.peek(invite -> invite.setRideStatus(ride.getRideStatus())).map(inviteRepo::save)
+				invitations = invitations.stream()
+						.peek(invite -> 
+							invite.setGuestUser(userList.stream()
+								.filter(user -> (user.getPrimaryEmail().equals(invite.getGuestUsername().trim()) || String
+									.valueOf(user.getPrimaryMobileNo()).equals(invite.getGuestUsername().trim())))
+						.findAny()
+						.orElse(null)))
+						.peek(invite -> invite.setRide(ride))
+						.peek(invite -> invite.setRideStatus(ride.getRideStatus()))
+						.map(inviteRepo::save)
 						.collect(Collectors.toList());
 			}
 
